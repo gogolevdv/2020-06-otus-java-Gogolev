@@ -1,0 +1,8 @@
+plugins {
+    id 'java'
+}
+
+group 'ru.otus'
+version '0.2'
+
+
