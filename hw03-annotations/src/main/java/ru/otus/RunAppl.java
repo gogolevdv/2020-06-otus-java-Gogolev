@@ -1,19 +1,22 @@
 package ru.otus;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 public class RunAppl {
 
     public static void main(String[] args) throws Exception {
 
-        // Создаем объекты класса с тестами
-        var aaa = new TestCalc();
-        var bbb = new TestCalc();
-        var ccc = new TestCalc();
+        Class<?> clazz = Class.forName("ru.otus.TestCalc");
 
-        // Запускаем тесты
-        RunTest.runTestCalc(aaa);
-        RunTest.runTestCalc(bbb);
-        RunTest.runTestCalc(ccc);
+        // Заполняем массив в тестовыми данными
+        Collection testData = Arrays.asList(new double[][]{
+                {1.0, 2.0, 3.0},
+                {2.2, 3.3, 5.4},
+                {3.4, 4.5, 7.9}
+        });
 
+        // Выполняем тесты
+        RunTest.runTestCalc(clazz, testData);
     }
-
 }
