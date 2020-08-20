@@ -11,4 +11,5 @@ rootProject.name = '2020-06-otus-java-Gogolev'
 include 'hw01-gradle'
 include 'hw02-diyarraylist'
 include 'hw03-annotations'
+include 'hw04-gc'
 
