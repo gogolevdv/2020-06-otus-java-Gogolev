@@ -1,14 +1,14 @@
 package ru.otus;
 
 
-// 3 мин.  2 мин   (Минимальная загрузка CPU  10 - 15 %) 5 мин
-//  java -Xms768m -Xmx768m -XX:+HeapDumpOnOutOfMemoryError -XX:+UseSerialGC -jar HW4-GC-0.1.jar
+//  2571 циклов  4 мин. 23 сек.
+//  java -Xms768m -Xmx768m -XX:+HeapDumpOnOutOfMemoryError -XX:+UseSerialGC -jar gradleHW4-0.1.jar
 
-//  2 мин. 1 мин. , 1.5 мин.
-// java -Xms768m -Xmx768m -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -jar HW4-GC-0.1.jar
+//  2571 циклов  1 мин. 53 сек.
+// java -Xms768m -Xmx768m -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -jar gradleHW4-0.1.jar
 
-// 5 мин.  3 мин. (Максимальная загрузка CPU  ~ 90 %) 7 мин.
-// java -Xms768m -Xmx768m -XX:+HeapDumpOnOutOfMemoryError -XX:+UseParallelGC -jar HW4-GC-0.1.jar
+//  2571 циклов  7 мин. 22 сек.
+// java -Xms768m -Xmx768m -XX:+HeapDumpOnOutOfMemoryError -XX:+UseParallelGC -jar gradleHW4-0.1.jar
 
 import com.sun.management.GarbageCollectionNotificationInfo;
 

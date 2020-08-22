@@ -22,6 +22,8 @@ public class Benchmark implements BenchmarkMBean{
         for (int idx = 0; idx < loopCounter; idx++) {
             int local = size;
 
+            System.out.println("Номер цикла: " + idx + ";");
+
             qq1_size = qq1.size();
 
             if (qq1.size()>size) {
