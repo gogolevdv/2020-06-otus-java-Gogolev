@@ -1,7 +1,7 @@
 package ru.otus;
 
 public class RunCalc {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ClassNotFoundException {
 
         CalcInterface myCalc = Ioc.createMyClass();
 
