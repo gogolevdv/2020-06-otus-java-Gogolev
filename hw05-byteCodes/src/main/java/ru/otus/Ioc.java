@@ -3,21 +3,17 @@ package ru.otus;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Ioc {
 
-    // Массивы для имен и аргументов методов с аннотацией
-    static List<String> nameMethodsIsLogTrue = new ArrayList<>();
-    static List<Class<?>[]> argsMethodsIsLogTrue = new ArrayList<>();
+    // Набор для имен и типов аргументов методов с аннотацией
+    Set<String> methodIsLogTrue = new HashSet<>();
 
-
-    private Ioc() {
+    Ioc() {
     }
 
-    static CalcInterface createMyClass() throws ClassNotFoundException {
+     CalcInterface createMyClass() throws ClassNotFoundException {
 
         Class<?> clazz = Class.forName("ru.otus.CalcImpl");
 
@@ -25,9 +21,9 @@ public class Ioc {
 
         for (Method md : methods) {
             if (md.isAnnotationPresent(Log.class)) {
-                // методы с аннотацией помещаем в массивы
-                nameMethodsIsLogTrue.add(md.getName());
-                argsMethodsIsLogTrue.add(md.getParameterTypes());
+                // методы с аннотацией помещаем в set
+                var nameParamList = md.getName().concat(Arrays.toString(md.getParameterTypes()));
+                methodIsLogTrue.add(nameParamList);
             }
         }
 
@@ -38,7 +34,7 @@ public class Ioc {
 
     }
 
-    static class DemoInvocationHandler implements InvocationHandler {
+     class DemoInvocationHandler implements InvocationHandler {
         private final CalcInterface myClass;
 
         DemoInvocationHandler(CalcInterface myClass) {
@@ -48,15 +44,14 @@ public class Ioc {
         @Override
         public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 
-            if (nameMethodsIsLogTrue.contains(method.getName())) {
+            var nameParamList = method.getName().concat(Arrays.toString(method.getParameterTypes()));
 
-                for (Class[] argsofmethod : argsMethodsIsLogTrue)
-                    if (Arrays.equals(argsofmethod, method.getParameterTypes())) {
-                       // выводим параметры методов с аннотацией
-                        System.out.print("Executed method:" + method.getName() + "; Params: ");
-                        for (Object qq : args) System.out.print(qq + " ");
-                        System.out.println();
-                    }
+            for (String qq1 : methodIsLogTrue) {
+                if (qq1.equals(nameParamList)) {
+                    System.out.print("Executed method:" + method.getName() + "; Params: ");
+                    for (Object qq : args) System.out.print(qq + " ");
+                    System.out.println();
+                }
             }
 
             return method.invoke(myClass, args);
