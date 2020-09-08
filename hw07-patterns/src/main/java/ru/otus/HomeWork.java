@@ -2,6 +2,7 @@ package ru.otus;
 
 import ru.otus.handler.ComplexProcessor;
 import ru.otus.listener.ListenerPrinter;
+import ru.otus.listener.ListenerSaver;
 import ru.otus.processor.LoggerProcessorExceptionEvenSec;
 import ru.otus.processor.ProcessorChangePlace1113;
 import ru.otus.processor.ProcessorExceptionEvenSec;
@@ -25,12 +26,14 @@ public class HomeWork {
            из элеменов "to do" создать new ComplexProcessor и обработать сообщение
          */
 
-        var processors = List.of( new LoggerProcessorExceptionEvenSec(new ProcessorChangePlace1113()),new ProcessorChangePlace1113());
+        var processors = List.of( new ProcessorChangePlace1113(),new LoggerProcessorExceptionEvenSec(message -> message));
 
         var complexProcessor = new ComplexProcessor(processors, (ex) -> {});
 
         var listenerPrinter = new ListenerPrinter();
+        var listenerSaver = new ListenerSaver();
         complexProcessor.addListener(listenerPrinter);
+        complexProcessor.addListener(listenerSaver);
 
         var message = new Message.Builder()
                 .field11("field11")
@@ -41,5 +44,6 @@ public class HomeWork {
         System.out.println("result:" + result);
 
         complexProcessor.removeListener(listenerPrinter);
+        complexProcessor.removeListener(listenerSaver);
     }
 }
