@@ -1,10 +1,6 @@
 package ru.otus;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
-
-public class History implements SaveToFile {
+public class History {
     private Message oldMsg;
     private Message newMsg;
 
@@ -13,22 +9,12 @@ public class History implements SaveToFile {
         this.newMsg = newMsg;
     }
 
-    @Override
-    public void SaveToFile(Message oldMsg, Message newMsg) {
+    public Message getOldMsg() {
+        return oldMsg;
+    }
 
-        final String TEXT_FILE = "textFile.txt";
-
-        try (var bufferedWriter = new BufferedWriter(new FileWriter(TEXT_FILE, true))) {
-            bufferedWriter.newLine();
-            bufferedWriter.write("==========================");
-            bufferedWriter.newLine();
-            bufferedWriter.write("Старое сообщение: " + String.valueOf(oldMsg));
-            bufferedWriter.newLine();
-            bufferedWriter.write("Новое сообщение: " + String.valueOf(newMsg));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+    public Message getNewMsg() {
+        return newMsg;
     }
 
 }

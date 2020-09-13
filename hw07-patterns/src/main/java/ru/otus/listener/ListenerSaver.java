@@ -3,6 +3,7 @@ package ru.otus.listener;
 
 import ru.otus.History;
 import ru.otus.Message;
+import ru.otus.SaverToFile;
 
 public class ListenerSaver implements Listener {
 
@@ -11,7 +12,9 @@ public class ListenerSaver implements Listener {
 
         History history = new History(oldMsg, newMsg);
 
-        history.SaveToFile(oldMsg, newMsg);
+        SaverToFile toFile = new SaverToFile(history);
+
+        toFile.save(history);
 
 
     }
