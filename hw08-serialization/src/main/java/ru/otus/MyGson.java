@@ -8,12 +8,25 @@ public class MyGson {
 
     public String toJson(Object obj) {
         if (obj == null) {
-            return  "{}";
+            return  String.valueOf(JsonValue.NULL);
         }
         return toJson(obj, obj.getClass());
     }
 
     public String toJson(Object obj, Class<?> clazz) {
+
+        if (obj instanceof Integer ||
+                obj instanceof Boolean ||
+                obj instanceof Byte ||
+                obj instanceof Short ||
+                obj instanceof Long ||
+                obj instanceof Float ||
+                obj instanceof Double) return String.valueOf(obj);
+        else if (obj instanceof String ||
+                obj instanceof Character) return "\"" + obj + "\"";
+        else if (obj instanceof int[]) return String.valueOf(intToJsonArray((int[]) obj).build());
+        else if (obj instanceof Collection) return String.valueOf(Json.createArrayBuilder((Collection) obj).build());
+
 
         Field[] fieldsAll = clazz.getDeclaredFields();
 
