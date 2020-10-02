@@ -22,20 +22,23 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
         Field[] fields = tClass.getDeclaredFields();
 
         allFields = new ArrayList<>();
-        Arrays.stream(fields).forEach(val -> {
+        for (Field val:fields){
             allFields.add(val);
-        });
+        }
 
         final Field[] idField1 = new Field[1];
-        allFields.forEach(val -> {
-            if (val.isAnnotationPresent(Id.class)) idField1[0] = val;
-        });
+        for (Field val:allFields){
+            if (val.isAnnotationPresent(Id.class)) {
+                idField1[0] = val;
+            }
+        }
+
         idField = idField1[0];
 
         fieldsWithoutId = new ArrayList<>();
-        Arrays.stream(fields).forEach(val -> {
+        for(Field val:fields){
             if (!val.isAnnotationPresent(Id.class)) fieldsWithoutId.add(val);
-        });
+        }
 
         try {
             constructor = tClass.getDeclaredConstructor();
@@ -52,7 +55,7 @@ public class EntityClassMetaDataImpl<T> implements EntityClassMetaData<T> {
     }
 
     @Override
-    public Constructor getConstructor() {
+    public Constructor<T> getConstructor() {
         return constructor;
     }
 

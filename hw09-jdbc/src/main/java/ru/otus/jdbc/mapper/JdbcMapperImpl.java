@@ -22,7 +22,7 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
     private final EntitySQLMetaData sqlMetaData;
 
 
-    public JdbcMapperImpl(SessionManagerJdbc sessionManager, DbExecutor dbExecutor, EntitySQLMetaDataImpl sqlMetaData, EntityClassMetaDataImpl entityClassMetaData) {
+    public JdbcMapperImpl(SessionManagerJdbc sessionManager, DbExecutor dbExecutor, EntitySQLMetaData sqlMetaData, EntityClassMetaData entityClassMetaData) {
         this.sessionManager = sessionManager;
         this.dbExecutor = dbExecutor;
         this.sqlMetaData = sqlMetaData;
@@ -66,7 +66,7 @@ public class JdbcMapperImpl<T> implements JdbcMapper<T> {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        return null;
+                        throw new UnsupportedOperationException();
                     });
         } catch (Exception e) {
 

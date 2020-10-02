@@ -10,6 +10,7 @@ import ru.otus.h2.DataSourceH2;
 import ru.otus.jdbc.DbExecutorImpl;
 import ru.otus.jdbc.dao.AccountDaoJdbcMapper;
 import ru.otus.jdbc.mapper.EntityClassMetaDataImpl;
+import ru.otus.jdbc.mapper.EntitySQLMetaData;
 import ru.otus.jdbc.mapper.EntitySQLMetaDataImpl;
 import ru.otus.jdbc.mapper.JdbcMapperImpl;
 import ru.otus.jdbc.sessionmanager.SessionManagerJdbc;
@@ -28,17 +29,17 @@ public class HomeWork {
         // Работа с пользователем
 //        DbExecutorImpl<User> dbExecutor = new DbExecutorImpl<>();
 //        var entityClassMetaData = new EntityClassMetaDataImpl<>(User.class);
-//        EntitySQLMetaDataImpl sqlMetaDat = new EntitySQLMetaDataImpl<User>(entityClassMetaData);
+//        EntitySQLMetaData sqlMetaDat = new EntitySQLMetaDataImpl<>(entityClassMetaData);
 //        JdbcMapperImpl<User> jdbcMapperUser = new JdbcMapperImpl<>(sessionManager, dbExecutor,sqlMetaDat,entityClassMetaData);
 //
 //        UserDao userDao = new UserDaoJdbcMapper( jdbcMapperUser );
 
         DbExecutorImpl<Account> dbExecutor = new DbExecutorImpl<>();
         var entityClassMetaData = new EntityClassMetaDataImpl<>(Account.class);
-        EntitySQLMetaDataImpl sqlMetaDat = new EntitySQLMetaDataImpl<Account>(entityClassMetaData);
-        JdbcMapperImpl<Account> jdbcMapperAccount = new JdbcMapperImpl<>(sessionManager, dbExecutor,sqlMetaDat,entityClassMetaData);
+        var sqlMetaDat = new EntitySQLMetaDataImpl<>(entityClassMetaData);
+        JdbcMapperImpl<Account> jdbcMapperAccount = new JdbcMapperImpl<>(sessionManager, dbExecutor, sqlMetaDat, entityClassMetaData);
 
-        AccountDao accountDao = new AccountDaoJdbcMapper( jdbcMapperAccount );
+        AccountDao accountDao = new AccountDaoJdbcMapper(jdbcMapperAccount);
 
 // Код дальше должен остаться, т.е. userDao должен использоваться
 //        var dbServiceUser = new DbServiceUserImpl(userDao);
