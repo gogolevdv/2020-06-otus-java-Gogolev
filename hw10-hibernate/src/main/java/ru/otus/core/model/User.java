@@ -1,13 +1,16 @@
 package ru.otus.core.model;
 
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue
     @Column(name = "id")
     private long id;
 
@@ -17,6 +20,28 @@ public class User {
     @Column(name = "age")
     private int age;
 
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<PhoneDataSet> phones = new ArrayList<>();
+
+    public List<PhoneDataSet> getPhone() {
+        return phones;
+    }
+
+    public void setPhone(List<PhoneDataSet> phones) {
+        this.phones = phones;
+    }
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn (name="user_id")
+     private AddressDataSet address;
+
+    public AddressDataSet getAddress() {
+        return address;
+    }
+
+    public void setAddress(AddressDataSet address) {
+        this.address = address;
+    }
 
     public User() {
     }
@@ -52,13 +77,17 @@ public class User {
         this.age = age;
     }
 
+
     @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", age=" + age +
+                ", address=" + address +
+                ", phones=" + phones +
                 '}';
     }
+
 
 }

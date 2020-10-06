@@ -6,6 +6,7 @@ import org.hibernate.stat.EntityStatistics;
 import org.hibernate.stat.Statistics;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import ru.otus.core.model.AddressDataSet;
 import ru.otus.core.model.User;
 import ru.otus.flyway.MigrationsExecutor;
 import ru.otus.flyway.MigrationsExecutorFlyway;

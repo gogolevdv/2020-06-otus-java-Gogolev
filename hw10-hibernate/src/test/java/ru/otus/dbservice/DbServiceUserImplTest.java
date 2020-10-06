@@ -8,6 +8,7 @@ import org.mockito.InOrder;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import ru.otus.core.dao.UserDao;
+import ru.otus.core.model.AddressDataSet;
 import ru.otus.core.model.User;
 import ru.otus.core.service.DbServiceException;
 import ru.otus.core.service.DbServiceUserImpl;

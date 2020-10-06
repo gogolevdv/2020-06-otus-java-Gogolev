@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.otus.AbstractHibernateTest;
 import ru.otus.core.dao.UserDao;
+import ru.otus.core.model.AddressDataSet;
 import ru.otus.core.model.User;
 import ru.otus.core.service.DBServiceUser;
 import ru.otus.core.service.DbServiceUserImpl;
