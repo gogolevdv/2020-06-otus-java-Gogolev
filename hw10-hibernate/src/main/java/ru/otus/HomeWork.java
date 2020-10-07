@@ -67,9 +67,9 @@ public class HomeWork {
 
         Optional<User> mayBeCreatedUser = dbServiceUser.getUser(id);
 
-        long id1 = dbServiceUser.saveUser(user2);
+        id = dbServiceUser.saveUser(user2);
 
-        Optional<User> mayBeUpdatedUser = dbServiceUser.getUser(id1);
+        Optional<User> mayBeUpdatedUser = dbServiceUser.getUser(id);
 
         outputUserOptional("Created user", mayBeCreatedUser);
         outputUserOptional("Updated user", mayBeUpdatedUser);
