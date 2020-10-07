@@ -40,39 +40,39 @@ public class HomeWork {
         User user1 = new User(0, "Вася", 35);
         User user2 = new User(1L, "А! Нет. Это же совсем не Вася", 36);
 
-//        user1.setAddress(new AddressDataSet("123",user1.getId()));
-//        user2.setAddress(new AddressDataSet("567",user2.getId()));
+        user1.setAddress(new AddressDataSet("123",user1.getId()));
+        user2.setAddress(new AddressDataSet("567",user2.getId()));
 
-//        List<PhoneDataSet> phList_1 = new ArrayList<>();
-//        List<PhoneDataSet> phList_2 = new ArrayList<>();
+        AddressDataSet addr2 = new AddressDataSet();
+        addr2.setStreet("567");
+        addr2.setUser(user2);
+        user2.setAddress(addr2);
 
-//        PhoneDataSet ph = new PhoneDataSet();
-//        ph.setNumber("987");
-//        ph.setUser(user1);
-//        PhoneDataSet ph1 = new PhoneDataSet();
-//        ph1.setNumber("765");
-//        ph1.setUser(user1);
-//        phList_1.add(ph);
-//        phList_1.add(ph1);
-//        user1.setPhone(phList_1);
+        List<PhoneDataSet> phList_1 = new ArrayList<>();
+        List<PhoneDataSet> phList_2 = new ArrayList<>();
 
-//         ph = new PhoneDataSet();
-//        ph.setNumber("842");
-//        ph.setUser(user2);
-//        phList_2.add(ph);
-//        user2.setPhone(phList_2);
+        PhoneDataSet ph1 = new PhoneDataSet();
+        ph1.setNumber("765");
+        ph1.setUser(user1);
+        phList_1.add(ph1);
+        user1.setPhone(phList_1);
+
+         PhoneDataSet ph2 = new PhoneDataSet();
+        ph2.setNumber("842");
+        ph2.setUser(user2);
+        phList_2.add(ph2);
+        user2.setPhone(phList_2);
 
         long id = dbServiceUser.saveUser(user1);
 
         Optional<User> mayBeCreatedUser = dbServiceUser.getUser(id);
 
-        id = dbServiceUser.saveUser(user2);
+        long id1 = dbServiceUser.saveUser(user2);
 
-        Optional<User> mayBeUpdatedUser = dbServiceUser.getUser(id);
+        Optional<User> mayBeUpdatedUser = dbServiceUser.getUser(id1);
 
         outputUserOptional("Created user", mayBeCreatedUser);
         outputUserOptional("Updated user", mayBeUpdatedUser);
-
 
 // Работа со счетом
 

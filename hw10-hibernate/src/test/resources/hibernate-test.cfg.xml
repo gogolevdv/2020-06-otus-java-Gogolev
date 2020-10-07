@@ -19,5 +19,9 @@
 
     <property name="hibernate.generate_statistics">true</property>
 
+    <mapping class="ru.otus.core.model.User"/>
+    <mapping class="ru.otus.core.model.AddressDataSet"/>
+    <mapping class="ru.otus.core.model.PhoneDataSet"/>
+
   </session-factory>
 </hibernate-configuration>

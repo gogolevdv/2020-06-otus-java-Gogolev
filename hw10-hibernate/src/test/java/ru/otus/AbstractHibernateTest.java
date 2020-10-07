@@ -7,6 +7,7 @@ import org.hibernate.stat.Statistics;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import ru.otus.core.model.AddressDataSet;
+import ru.otus.core.model.PhoneDataSet;
 import ru.otus.core.model.User;
 import ru.otus.flyway.MigrationsExecutor;
 import ru.otus.flyway.MigrationsExecutorFlyway;
@@ -33,7 +34,7 @@ public abstract class AbstractHibernateTest {
         MigrationsExecutor migrationsExecutor = new MigrationsExecutorFlyway(HIBERNATE_CFG_XML_FILE_RESOURCE);
         migrationsExecutor.cleanDb();
         migrationsExecutor.executeMigrations();
-        sessionFactory = HibernateUtils.buildSessionFactory(HIBERNATE_CFG_XML_FILE_RESOURCE, User.class);
+        sessionFactory = HibernateUtils.buildSessionFactory(HIBERNATE_CFG_XML_FILE_RESOURCE, User.class, AddressDataSet.class, PhoneDataSet.class);
     }
 
     @AfterEach
