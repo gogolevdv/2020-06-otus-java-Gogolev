@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.cachehw.HwCache;
 import ru.otus.cachehw.HwListener;
+import ru.otus.cachehw.MyListener;
 import ru.otus.core.dao.UserDao;
 import ru.otus.core.model.User;
 
@@ -14,21 +15,12 @@ public class DbServiceUserImplCache implements DBServiceUser {
 
     private final UserDao userDao;
 
-    private final HwCache myCache;
+    private final HwCache<Long,User> myCache;
 
-    public DbServiceUserImplCache(UserDao userDao, HwCache myCache) {
+    public DbServiceUserImplCache(UserDao userDao, HwCache<Long,User> myCache) {
         this.userDao = userDao;
         this.myCache = myCache;
-
-        HwListener<Long, User> listener = new HwListener<Long, User>() {
-            public void notify(Long key, User value, String action) {
-                logger.info("key:{}, value:{}, action: {}", new Object[]{key, value, action});
-            }
-        };
-        myCache.addListener(listener);
-
     }
-
 
     @Override
     public long saveUser(User user) {
@@ -36,7 +28,7 @@ public class DbServiceUserImplCache implements DBServiceUser {
             sessionManager.beginSession();
             try {
                 userDao.insertOrUpdate(user);
-                long userId = user.getId();
+                Long userId = user.getId();
                 myCache.put(userId, user);
                 sessionManager.commitSession();
 
@@ -56,7 +48,7 @@ public class DbServiceUserImplCache implements DBServiceUser {
             try {
                 Optional<User> userOptional;
 
-                User user = (User) myCache.get(id);
+                User user = myCache.get(id);
                 if (user == null) {
                     userOptional = userDao.findById(id);
                     logger.info("user: {}", userOptional.orElse(null));

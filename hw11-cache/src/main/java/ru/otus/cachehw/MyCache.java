@@ -1,33 +1,29 @@
 package ru.otus.cachehw;
 
-import java.lang.ref.WeakReference;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.WeakHashMap;
 
 public class MyCache<K, V> implements HwCache<K, V> {
-    private final WeakHashMap<K, V> cache = new WeakHashMap();
-    private final List<WeakReference<HwListener<K, V>>> listeners = new ArrayList();
+    private final WeakHashMap<K, V> cache = new WeakHashMap<>();
+    private HwListener<K, V> listener;
 
     public MyCache() {
     }
 
     public void put(K key, V value) {
         this.cache.put(key, value);
-        this.notyfyListeners(key, value, "put");
+        listener.notify(key, value, "put");
     }
 
     public void remove(K key) {
         if (this.cache.containsKey(key)) {
-            this.notyfyListeners(key, this.getValue(key), "remove");
+            listener.notify(key, this.get(key), "remove");
             this.cache.remove(key);
         }
-
     }
 
     public V get(K key) {
         V value = this.cache.get(key);
-        this.notyfyListeners(key, value, "get");
+        listener.notify(key, value, "get");
         return value;
     }
 
@@ -36,20 +32,10 @@ public class MyCache<K, V> implements HwCache<K, V> {
     }
 
     public void addListener(HwListener<K, V> listener) {
-        this.listeners.add(new WeakReference(listener));
+        this.listener = listener;
     }
 
     public void removeListener(HwListener<K, V> listener) {
-        this.listeners.remove(listener);
-    }
-
-    private void notyfyListeners(K key, V value, String action) {
-        this.listeners.forEach((listeners) -> {
-            ((HwListener)listeners.get()).notify(key, value, action);
-        });
-    }
-
-    private V getValue(K key) {
-        return this.cache.get(key);
+        this.listener = null;
     }
 }

@@ -4,7 +4,9 @@ import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.cachehw.HwCache;
+import ru.otus.cachehw.HwListener;
 import ru.otus.cachehw.MyCache;
+import ru.otus.cachehw.MyListener;
 import ru.otus.core.dao.UserDao;
 import ru.otus.core.model.AddressDataSet;
 import ru.otus.core.model.User;
@@ -31,7 +33,7 @@ public class HomeWork {
         List<Long> allId = new ArrayList<>();
         List<User> allUserList = new ArrayList<>();
 
-        Long id;
+        long id;
 
         // Все главное см в тестах
         SessionFactory sessionFactory = HibernateUtils.buildSessionFactory(HIBERNATE_CFG_FILE, User.class, AddressDataSet.class);
@@ -39,14 +41,16 @@ public class HomeWork {
         SessionManagerHibernate sessionManager = new SessionManagerHibernate(sessionFactory);
         UserDao userDao = new UserDaoHibernate(sessionManager);
 
-        HwCache myCache = new MyCache();
+        HwCache<Long,User> myCache = new MyCache<>();
+        HwListener<Long,User> myListener = new MyListener<>();
+        myCache.addListener(myListener);
 
 
         // with cache
-//        DBServiceUser dbServiceUser = new DbServiceUserImplCache(userDao, myCache);
+        DBServiceUser dbServiceUser = new DbServiceUserImplCache(userDao, myCache);
 
         // without cache
-        DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao);
+//        DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao);
 
         User user1 = new User();
         allUserList.add(user1);
@@ -105,13 +109,14 @@ public class HomeWork {
 
         long begin = System.currentTimeMillis();
 
-        for (long readId : allId) {
+        for (Long readId : allId) {
             outputUserOptional("User " + readId, dbServiceUser.getUser(readId));
         }
 
 
         logger.info("!!!!!!!!   ReadAllUser time:" + (System.currentTimeMillis() - begin) + "  !!!!!!!!!!!!!!!!!!!!");
 
+        myCache.removeListener(myListener);
 // Работа со счетом
 
     }
