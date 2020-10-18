@@ -2,6 +2,7 @@ package ru.otus.hibernate.dao;
 
 
 import org.hibernate.Session;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ru.otus.core.dao.UserDao;
@@ -11,7 +12,9 @@ import ru.otus.core.sessionmanager.SessionManager;
 import ru.otus.hibernate.sessionmanager.DatabaseSessionHibernate;
 import ru.otus.hibernate.sessionmanager.SessionManagerHibernate;
 
+import java.util.Iterator;
 import java.util.Optional;
+import java.util.Random;
 
 public class UserDaoHibernate implements UserDao {
     private static Logger logger = LoggerFactory.getLogger(UserDaoHibernate.class);
@@ -26,6 +29,7 @@ public class UserDaoHibernate implements UserDao {
     @Override
     public Optional<User> findById(long id) {
         DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
+
         try {
             return Optional.ofNullable(currentSession.getHibernateSession().find(User.class, id));
         } catch (Exception e) {
@@ -36,6 +40,23 @@ public class UserDaoHibernate implements UserDao {
 
     @Override
     public Optional<User> findRandomUser() {
+        DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
+        Random r = new Random();
+
+        var query = currentSession.getHibernateSession().createQuery("select count(*) from User ").getSingleResult();
+        var count = query;
+
+        logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   No. of rows : " + count);
+        var id = r.nextInt(Integer.parseInt(count.toString()));
+        if (id==0) id=1;
+        logger.info("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!   id : " + id);
+
+        try {
+
+            return Optional.ofNullable(currentSession.getHibernateSession().find(User.class, (long) id));
+        } catch (Exception e) {
+            logger.error(e.getMessage(), e);
+        }
         return Optional.empty();
     }
 

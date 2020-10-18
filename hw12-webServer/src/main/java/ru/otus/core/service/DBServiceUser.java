@@ -9,4 +9,5 @@ public interface DBServiceUser {
     long saveUser(User user);
 
     Optional<User> getUser(long id);
+    Optional<User> getRandomUser();
 }

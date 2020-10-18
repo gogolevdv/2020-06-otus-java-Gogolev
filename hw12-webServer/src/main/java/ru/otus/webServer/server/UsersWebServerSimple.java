@@ -8,6 +8,7 @@ import org.eclipse.jetty.server.handler.ResourceHandler;
 import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import ru.otus.core.dao.UserDao;
+import ru.otus.core.service.DBServiceUser;
 import ru.otus.webServer.helpers.FileSystemHelper;
 import ru.otus.webServer.services.TemplateProcessor;
 import ru.otus.webServer.servlet.UsersApiServlet;
@@ -19,12 +20,14 @@ public class UsersWebServerSimple implements UsersWebServer {
     private static final String COMMON_RESOURCES_DIR = "static";
 
     private final UserDao userDao;
+    private final DBServiceUser dbServiceUser;
     private final Gson gson;
     protected final TemplateProcessor templateProcessor;
     private final Server server;
 
-    public UsersWebServerSimple(int port, UserDao userDao, Gson gson, TemplateProcessor templateProcessor) {
+    public UsersWebServerSimple(int port, UserDao userDao, Gson gson, TemplateProcessor templateProcessor,DBServiceUser dbServiceUser) {
         this.userDao = userDao;
+        this.dbServiceUser=dbServiceUser;
         this.gson = gson;
         this.templateProcessor = templateProcessor;
         server = new Server(port);
@@ -76,7 +79,7 @@ public class UsersWebServerSimple implements UsersWebServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userDao)), "/users");
+        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userDao,dbServiceUser)), "/users");
         servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userDao, gson)), "/api/user/*");
         return servletContextHandler;
     }

@@ -50,4 +50,21 @@ public class DbServiceUserImpl implements DBServiceUser {
             return Optional.empty();
         }
     }
+
+    @Override
+    public Optional<User> getRandomUser() {
+        try (var sessionManager = userDao.getSessionManager()) {
+            sessionManager.beginSession();
+            try {
+                Optional<User> userOptional = userDao.findRandomUser();
+
+                logger.info("user: {}", userOptional.orElse(null));
+                return userOptional;
+            } catch (Exception e) {
+                logger.error(e.getMessage(), e);
+                sessionManager.rollbackSession();
+            }
+            return Optional.empty();
+        }
+    }
 }
