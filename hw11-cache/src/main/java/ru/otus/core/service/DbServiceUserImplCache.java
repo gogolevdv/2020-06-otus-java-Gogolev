@@ -15,9 +15,9 @@ public class DbServiceUserImplCache implements DBServiceUser {
 
     private final UserDao userDao;
 
-    private final HwCache<Long,User> myCache;
+    private final HwCache<String,User> myCache;
 
-    public DbServiceUserImplCache(UserDao userDao, HwCache<Long,User> myCache) {
+    public DbServiceUserImplCache(UserDao userDao, HwCache<String,User> myCache) {
         this.userDao = userDao;
         this.myCache = myCache;
     }
@@ -29,7 +29,7 @@ public class DbServiceUserImplCache implements DBServiceUser {
             try {
                 userDao.insertOrUpdate(user);
                 Long userId = user.getId();
-                myCache.put(userId, user);
+                myCache.put(Long.toString(userId), user);
                 sessionManager.commitSession();
 
                 logger.info("created user: {}", userId);
@@ -48,7 +48,7 @@ public class DbServiceUserImplCache implements DBServiceUser {
             try {
                 Optional<User> userOptional;
 
-                User user = myCache.get(id);
+                User user = myCache.get(Long.toString(id));
                 if (user == null) {
                     userOptional = userDao.findById(id);
                     logger.info("user: {}", userOptional.orElse(null));

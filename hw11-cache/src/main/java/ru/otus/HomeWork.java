@@ -41,8 +41,8 @@ public class HomeWork {
         SessionManagerHibernate sessionManager = new SessionManagerHibernate(sessionFactory);
         UserDao userDao = new UserDaoHibernate(sessionManager);
 
-        HwCache<Long,User> myCache = new MyCache<>();
-        HwListener<Long,User> myListener = new MyListener<>();
+        HwCache<String,User> myCache = new MyCache<>();
+        HwListener<String,User> myListener = new MyListener<>();
         myCache.addListener(myListener);
 
 
