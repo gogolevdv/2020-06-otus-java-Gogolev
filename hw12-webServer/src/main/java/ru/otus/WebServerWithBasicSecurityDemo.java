@@ -23,11 +23,11 @@ import ru.otus.webServer.helpers.FileSystemHelper;
 import ru.otus.webServer.server.UsersWebServer;
 import ru.otus.webServer.server.UsersWebServerSimple;
 //import ru.otus.webServer.server.UsersWebServerWithBasicSecurity;
+import ru.otus.webServer.server.UsersWebServerWithBasicSecurity;
 import ru.otus.webServer.services.TemplateProcessor;
 import ru.otus.webServer.services.TemplateProcessorImpl;
 
-import java.util.Iterator;
-import java.util.Optional;
+import java.util.*;
 
 
 /*
@@ -63,12 +63,50 @@ public class WebServerWithBasicSecurityDemo {
         UserDao userDao = new UserDaoHibernate(sessionManager);
         DBServiceUser dbServiceUser = new DbServiceUserImpl(userDao);
 
-        User user1 = new User(0, "Вася", 35,"user1","user1");
-        User user2 = new User(0, "Вася_2", 36,"user2","user2");
-        User user3 = new User(0, "Вася_3", 37,"user3","user3");
-        User user4 = new User(0, "Вася_4", 38,"user4","user4");
-        User user5 = new User(0, "Вася_5", 39,"user5","user5");
 
+        User user1 = new User(0, "Вася", 35, "user1", "user1");
+        User user2 = new User(0, "Вася_2", 36, "user2", "user2");
+        User user3 = new User(0, "Вася_3", 37, "user3", "user3");
+        User user4 = new User(0, "Вася_4", 38, "user4", "user4");
+        User user5 = new User(0, "Вася_5", 39, "user5", "user5");
+        User user6 = new User(0, "Вася_6", 44, "user5", "user5");
+        User user7 = new User(0, "Вася_7", 55, "user5", "user5");
+
+        AddressDataSet addressDataSet1 = new AddressDataSet();
+        PhoneDataSet phoneDataSet1 = new PhoneDataSet();
+        addressDataSet1.setStreet("123");
+        Set<PhoneDataSet> phones1 = new HashSet<>();
+        phoneDataSet1.setNumber("1234567");
+        phoneDataSet1.setNumber("qwqrwer");
+        phoneDataSet1.setUser(user1);
+        phones1.add(phoneDataSet1);
+
+        user1.setAddress(addressDataSet1);
+        user1.setPhone(phones1);
+
+        AddressDataSet addressDataSet2 = new AddressDataSet();
+        addressDataSet2.setStreet("234");
+        user2.setAddress(addressDataSet2);
+
+        AddressDataSet addressDataSet3 = new AddressDataSet();
+        addressDataSet3.setStreet("123");
+        user3.setAddress(addressDataSet3);
+
+        AddressDataSet addressDataSet4 = new AddressDataSet();
+        addressDataSet4.setStreet("123");
+        user4.setAddress(addressDataSet4);
+
+        AddressDataSet addressDataSet5 = new AddressDataSet();
+        addressDataSet5.setStreet("123");
+        user5.setAddress(addressDataSet5);
+
+        AddressDataSet addressDataSet6 = new AddressDataSet();
+        addressDataSet6.setStreet("123");
+        user6.setAddress(addressDataSet6);
+
+        AddressDataSet addressDataSet7 = new AddressDataSet();
+        addressDataSet7.setStreet("123");
+        user7.setAddress(addressDataSet7);
 
 
         long id = dbServiceUser.saveUser(user1);
@@ -86,23 +124,18 @@ public class WebServerWithBasicSecurityDemo {
 
         id = dbServiceUser.saveUser(user4);
         id = dbServiceUser.saveUser(user5);
+        id = dbServiceUser.saveUser(user6);
+        id = dbServiceUser.saveUser(user7);
 
         Gson gson = new GsonBuilder().serializeNulls().setPrettyPrinting().create();
         TemplateProcessor templateProcessor = new TemplateProcessorImpl(TEMPLATES_DIR);
 
         String hashLoginServiceConfigPath = FileSystemHelper.localFileNameOrResourceNameToFullPath(HASH_LOGIN_SERVICE_CONFIG_NAME);
         LoginService loginService = new HashLoginService(REALM_NAME, hashLoginServiceConfigPath);
-        //LoginService loginService = new InMemoryLoginServiceImpl(userDao);
 
-//        UsersWebServer usersWebServer = new UsersWebServerWithBasicSecurity(WEB_SERVER_PORT,
-//                loginService, userDao, gson, templateProcessor);
+        UsersWebServer usersWebServer = new UsersWebServerWithBasicSecurity(WEB_SERVER_PORT,
+                loginService, gson, templateProcessor,dbServiceUser);
 
-        mayBeCreatedUser = dbServiceUser.getUser(1);
-
-        outputUserOptional("Created user: !!!!", mayBeCreatedUser);
-
-        UsersWebServer usersWebServer = new UsersWebServerSimple(WEB_SERVER_PORT,
-                 userDao, gson, templateProcessor,dbServiceUser);
 
         usersWebServer.start();
         usersWebServer.join();

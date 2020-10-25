@@ -11,6 +11,7 @@ import ru.otus.core.dao.UserDao;
 import ru.otus.core.service.DBServiceUser;
 import ru.otus.webServer.helpers.FileSystemHelper;
 import ru.otus.webServer.services.TemplateProcessor;
+import ru.otus.webServer.servlet.AddUsersServlet;
 import ru.otus.webServer.servlet.UsersApiServlet;
 import ru.otus.webServer.servlet.UsersServlet;
 
@@ -19,14 +20,12 @@ public class UsersWebServerSimple implements UsersWebServer {
     private static final String START_PAGE_NAME = "index.html";
     private static final String COMMON_RESOURCES_DIR = "static";
 
-    private final UserDao userDao;
     private final DBServiceUser dbServiceUser;
     private final Gson gson;
     protected final TemplateProcessor templateProcessor;
     private final Server server;
 
-    public UsersWebServerSimple(int port, UserDao userDao, Gson gson, TemplateProcessor templateProcessor,DBServiceUser dbServiceUser) {
-        this.userDao = userDao;
+    public UsersWebServerSimple(int port, Gson gson, TemplateProcessor templateProcessor,DBServiceUser dbServiceUser) {
         this.dbServiceUser=dbServiceUser;
         this.gson = gson;
         this.templateProcessor = templateProcessor;
@@ -58,7 +57,7 @@ public class UsersWebServerSimple implements UsersWebServer {
 
         HandlerList handlers = new HandlerList();
         handlers.addHandler(resourceHandler);
-        handlers.addHandler(applySecurity(servletContextHandler, "/users", "/api/user/*"));
+        handlers.addHandler(applySecurity(servletContextHandler, "/users", "/api/user/*","/add_user/*"));
 
 
         server.setHandler(handlers);
@@ -79,8 +78,9 @@ public class UsersWebServerSimple implements UsersWebServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.SESSIONS);
-        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, userDao,dbServiceUser)), "/users");
-        servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(userDao, gson)), "/api/user/*");
+        servletContextHandler.addServlet(new ServletHolder(new UsersServlet(templateProcessor, dbServiceUser)), "/users");
+        servletContextHandler.addServlet(new ServletHolder(new UsersApiServlet(dbServiceUser, gson)), "/api/user/*");
+        servletContextHandler.addServlet(new ServletHolder(new AddUsersServlet(templateProcessor, dbServiceUser)), "/add_user/*");
         return servletContextHandler;
     }
 }
