@@ -34,23 +34,16 @@
                 })
             })
             .then(response => response.json())
-                .then(user => {
-                    const text = '<td>' + user.id + '</td>\n' +
-                        '        <td>' + user.name + '</td>\n' +
-                        '        <td>' + user.age + '</td>\n' +
-                        '        <td>' + user.login + '</td>\n' +
-                        '        <td>' + user.password + '</td>';
-                });
+                .then( window.location.assign('/users'));
 
         }
 
-        function f() {
+        function checkDataBeforeSave() {
             if (userNameTextBox.value === "") {
                 alert("Имя пользователя пустое!")
                 return;
             }
             saveUser();
-            window.location.assign('/users');
         }
     </script>
 </head>
@@ -83,6 +76,6 @@
         <input type="text" id="userPasswordTextBox" name="password" value="user88"/>
     </div>
 
-<button class="btn btn-primary m-t-1" onclick="f()">Сохранить</button>
+<button class="btn btn-primary m-t-1" onclick="checkDataBeforeSave()">Сохранить</button>
 </body>
 </html>
