@@ -14,45 +14,58 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     private final List<Object> appComponents = new ArrayList<>();
     private final Map<String, Object> appComponentsByName = new HashMap<>();
-    private final Map<String, Object> appComponentsByReturnType = new HashMap<>();
 
-    public AppComponentsContainerImpl(Class<?> initialConfigClass) throws InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+    public AppComponentsContainerImpl(Class<?> initialConfigClass) {
         processConfig(initialConfigClass);
     }
 
-    private void processConfig(Class<?> configClass) throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchMethodException {
+    private void processConfig(Class<?> configClass) {
         checkConfigClass(configClass);
         // You code here...
 
         Reflections reflection = new Reflections(configClass, new FieldAnnotationsScanner(), new MethodAnnotationsScanner(), new TypeAnnotationsScanner(), new SubTypesScanner());
 
-        Set<Method> methods = reflection.getMethodsAnnotatedWith(AppComponent.class);
+        List<Method> methods = reflection.getMethodsAnnotatedWith(AppComponent.class).stream()
+                .sorted(Comparator.comparingInt(x -> x.getAnnotation(AppComponent.class).order())).collect(Collectors.toList());
 
-        Constructor<?> constructor = configClass.getConstructor();
-        AppConfig appConfig = (AppConfig) constructor.newInstance();
+        Constructor<?> constructor = null;
+        try {
+            constructor = configClass.getConstructor();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        AppConfig appConfig = null;
+        try {
+            appConfig = (AppConfig) constructor.newInstance();
+        } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
-        Object objectOfMethod;
+        Object objectOfMethod = null;
 
-        for (Method method:methods){
-            appComponents.clear();
-            for (Object param : method.getParameterTypes()) {
-                appComponents.add(appComponentsByReturnType.get(String.valueOf(param)));
+        for (Method method : methods) {
+
+            var params = new ArrayList<>();
+            for (Class<?> param : method.getParameterTypes()) {
+
+                params.add(appComponents.stream().filter(x -> param.isAssignableFrom(x.getClass())).findFirst().get());
+
             }
-            if (Arrays.stream(method.getParameterTypes()).count() == 0) {
-                objectOfMethod = method.invoke(appConfig);
 
+                try {
+                    objectOfMethod = method.invoke(appConfig, params.stream().toArray(Object[]::new));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
                 appComponentsByName.put(method.getName(), objectOfMethod);
-                appComponentsByReturnType.put(method.getReturnType().toString(), objectOfMethod);
-            } else {
-                objectOfMethod = method.invoke(appConfig, appComponents.toArray());
-                appComponentsByName.put(method.getName(), objectOfMethod);
-                appComponentsByReturnType.put(method.getReturnType().toString(), objectOfMethod);
-            }
+                appComponents.add(objectOfMethod);
+
         }
     }
 
@@ -63,20 +76,9 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
     }
 
     @Override
-    public <C> C getAppComponent(Class<C> componentClass) throws Exception {
+    public <C> C getAppComponent(Class<C> componentClass) {
 
-        for (Map.Entry<String,Object> entry:appComponentsByName.entrySet()){
-
-            if (entry.getValue().getClass().getSimpleName().equals(componentClass.getSimpleName())){
-                return (C) appComponentsByName.get(entry.getKey());
-            }
-            for (Class iface:entry.getValue().getClass().getInterfaces()){
-                if(iface.getSimpleName().equals(componentClass.getSimpleName())){
-                    return (C) appComponentsByName.get(entry.getKey());
-                }
-            }
-        }
-        throw new Exception("The class not found");
+        return (C) appComponents.stream().filter(x -> componentClass.isAssignableFrom(x.getClass())).findFirst().get();
     }
 
     @Override
