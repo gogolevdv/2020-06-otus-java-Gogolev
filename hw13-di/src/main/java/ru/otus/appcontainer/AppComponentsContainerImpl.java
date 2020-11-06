@@ -1,6 +1,7 @@
 package ru.otus.appcontainer;
 
 import org.reflections.Reflections;
+import org.reflections.ReflectionsException;
 import org.reflections.scanners.FieldAnnotationsScanner;
 import org.reflections.scanners.MethodAnnotationsScanner;
 import org.reflections.scanners.SubTypesScanner;
@@ -34,36 +35,24 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         List<Method> methods = reflection.getMethodsAnnotatedWith(AppComponent.class).stream()
                 .sorted(Comparator.comparingInt(x -> x.getAnnotation(AppComponent.class).order())).collect(Collectors.toList());
 
-        Constructor<?> constructor = null;
-        try {
-            constructor = configClass.getConstructor();
-        } catch (NoSuchMethodException e) {
-            e.printStackTrace();
-        }
-        AppConfig appConfig = null;
-        try {
-            appConfig = (AppConfig) constructor.newInstance();
-        } catch (InstantiationException | InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
+
+        var appConfig = createAppConfig(configClass);
 
         Object objectOfMethod = null;
 
         for (Method method : methods) {
 
             var params = new ArrayList<>();
-            for (Class<?> param : method.getParameterTypes()) {
 
-                params.add(appComponents.stream().filter(x -> param.isAssignableFrom(x.getClass())).findFirst().get());
+            for (Class<?> param : method.getParameterTypes()) {  params.add(getComponentByType(param));  }
 
+            try {
+                objectOfMethod = method.invoke(appConfig, params.stream().toArray(Object[]::new));
+            } catch (IllegalAccessException | InvocationTargetException e) {
+                e.printStackTrace();
             }
 
-                try {
-                    objectOfMethod = method.invoke(appConfig, params.stream().toArray(Object[]::new));
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                appComponentsByName.put(method.getName(), objectOfMethod);
+            appComponentsByName.put(method.getName(), objectOfMethod);
                 appComponents.add(objectOfMethod);
 
         }
@@ -75,10 +64,24 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         }
     }
 
+    private AppConfig createAppConfig(Class<?> configClass){
+        try {
+            Constructor<?> constructor = configClass.getConstructor();
+            return (AppConfig) constructor.newInstance();
+        } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+            e.printStackTrace();
+            throw new ReflectionsException(String.format("Given class is not create %s", configClass.getName()));
+        }
+    }
+
+    private Object getComponentByType(Class<?> component){
+        return appComponents.stream().filter(x -> component.isAssignableFrom(x.getClass())).findFirst().orElseThrow();
+    }
+
     @Override
     public <C> C getAppComponent(Class<C> componentClass) {
 
-        return (C) appComponents.stream().filter(x -> componentClass.isAssignableFrom(x.getClass())).findFirst().get();
+        return (C) getComponentByType(componentClass);
     }
 
     @Override
