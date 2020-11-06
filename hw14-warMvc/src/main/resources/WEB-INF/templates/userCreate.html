@@ -25,15 +25,27 @@
 <body>
 
 <form id="create-form" th:action="@{/user/save}" th:object="${user}" th:method="post" accept-charset="utf-8">
-    <h1>New User:</h1>
+    <h1>Новый пользователь:</h1>
 
     <div class="row">
         <label for="holder-input">Name:</label>
-        <input id="holder-input" name="name" type="text" th:value="${user.name}" value="John Doe"/>
+        <input id="holder-input" name="name" type="text" th:value="${user.name}" value="Петя_1"/>
+    </div>
+    <div class="row">
+        <label for="holder-input">Name:</label>
+        <input id="holder-input" name="age" type="number" th:value="${user.age}" value="35"/>
+    </div>
+    <div class="row">
+        <label for="holder-input">Login:</label>
+        <input id="holder-input" name="login" type="text" th:value="${user.login}" value="user_1"/>
+    </div>
+    <div class="row">
+        <label for="holder-input">Password:</label>
+        <input id="holder-input" name="password" type="text" th:value="${user.password}" value="user_1"/>
     </div>
 
     <div class="row">
-        <button type="submit">Save</button>
+        <button class="btn btn-primary m-t-1">Сохранить</button>
     </div>
 </form>
 

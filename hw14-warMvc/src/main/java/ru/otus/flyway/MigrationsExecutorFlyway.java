@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+
 public class MigrationsExecutorFlyway implements MigrationsExecutor {
     private static Logger logger = LoggerFactory.getLogger(MigrationsExecutor.class);
 
