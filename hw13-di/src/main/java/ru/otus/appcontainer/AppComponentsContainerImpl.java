@@ -75,7 +75,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
     private ArrayList<?> createArrayOfConponent(Method method) {
         var params = new ArrayList<>();
-        Arrays.stream(method.getParameterTypes()).allMatch(x->params.add(getComponentByType(x)));
+        Arrays.stream(method.getParameterTypes()).allMatch(x -> params.add(getComponentByType(x)));
         return params;
     }
 
