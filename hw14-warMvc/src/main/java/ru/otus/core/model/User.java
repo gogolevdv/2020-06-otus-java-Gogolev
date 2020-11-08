@@ -39,7 +39,7 @@ public class User {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    private AddressDataSet address;
+    private AddressDataSet address = new AddressDataSet();
 
     public AddressDataSet getAddress() {
         return address;

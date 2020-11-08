@@ -6,11 +6,13 @@ import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import ru.otus.core.dao.UserDao;
 import ru.otus.core.model.AddressDataSet;
+import ru.otus.core.model.PhoneDataSet;
 import ru.otus.core.model.User;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class DbServiceUserImpl implements DBServiceUser {
@@ -22,23 +24,29 @@ public class DbServiceUserImpl implements DBServiceUser {
     public DbServiceUserImpl(UserDao userDao) {
 
         this.userDao = userDao;
+
         User user_1 = new User(0, "Вася_1", 35, "user1", "user1");
         User user_2 = new User(0, "Вася_2", 36, "user2", "user2");
-        saveUser(user_1);
-        saveUser(user_2);
-        AddressDataSet addr_u_1 = new AddressDataSet();
+        AddressDataSet addr_u_1 = user_1.getAddress();
+        AddressDataSet addr_u_2 = user_2.getAddress();
+        Set<PhoneDataSet> setPhote_u_1 = user_1.getPhone();
+        PhoneDataSet ph_u_1 = new PhoneDataSet();
+        PhoneDataSet ph2_u_1 = new PhoneDataSet();
+        setPhote_u_1.add(ph_u_1);
+        setPhote_u_1.add(ph2_u_1);
+        ph_u_1.setNumber("123234123542345");
+        ph2_u_1.setNumber("098765");
+        ph_u_1.setUser(user_1);
         addr_u_1.setStreet("qwe");
+        addr_u_2.setStreet("4567");
 
         user_1.setAddress(addr_u_1);
-        addr_u_1.setUser(user_1);
+        user_1.setPhone(setPhote_u_1);
 
+        user_2.setAddress(addr_u_2);
 
-//        saveUser(new User(0, "Вася_2", 36, "user2", "user2"));
-//        saveUser(new User(0, "Вася_3", 37, "user3", "user3"));
-//        saveUser(new User(0, "Вася_4", 38, "user4", "user4"));
-//        saveUser(new User(0, "Вася_5", 39, "user5", "user5"));
-
-
+        saveUser(user_1);
+        saveUser(user_2);
 
     }
 

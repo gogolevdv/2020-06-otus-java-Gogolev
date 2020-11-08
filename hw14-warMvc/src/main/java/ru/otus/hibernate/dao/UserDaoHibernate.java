@@ -16,6 +16,7 @@ import ru.otus.hibernate.sessionmanager.DatabaseSessionHibernate;
 import ru.otus.hibernate.sessionmanager.SessionManagerHibernate;
 
 import java.beans.BeanProperty;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -50,8 +51,7 @@ public class UserDaoHibernate implements UserDao {
         DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
         Random r = new Random();
 
-        var query = currentSession.getHibernateSession().createQuery("select count(*) from User ").getSingleResult();
-        var count = query;
+        var count = currentSession.getHibernateSession().createQuery("select count(*) from User ").getSingleResult();
 
         var id = r.nextInt(Integer.parseInt(count.toString()));
         if (id==0) id=1;
@@ -72,10 +72,16 @@ public class UserDaoHibernate implements UserDao {
     @Override
     public List<User> getAllUsers() {
         DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
+//        var countOfUsers = currentSession.getHibernateSession().createQuery("select count(*) from User ").getSingleResult();
 
-        var query = currentSession.getHibernateSession().createQuery("FROM User").list();
-
-        return query;
+        List<User> listOfUsers = new ArrayList<>();
+        var listOfId = currentSession.getHibernateSession().createQuery("select id FROM User").list();
+        for (Object id:listOfId) {
+            listOfUsers.add(currentSession.getHibernateSession().find(User.class, id));
+        }
+        return listOfUsers;
+//        var query = currentSession.getHibernateSession().createQuery("FROM User").list();
+//        return query;
     }
 
     @Override

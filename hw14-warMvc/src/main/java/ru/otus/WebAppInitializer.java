@@ -18,18 +18,12 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
     @Override
     protected Class<?>[] getServletConfigClasses() {
         return new Class<?>[]{WebConfig.class};
-//                return new Class<?>[]{ServletConfig.class};
     }
-//    protected Class<?>[] getServletConfigClasses() {
-//        return new Class<?>[]{ServletConfig.class};
-//    }
 
     @Override
     protected String[] getServletMappings() {
         return new String[]{"/"};
     }
-
-
 
     @Override
     protected Filter[] getServletFilters() {
