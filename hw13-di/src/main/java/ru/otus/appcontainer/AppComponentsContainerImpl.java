@@ -42,19 +42,14 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
 
         for (Method method : methods) {
 
-            var params = new ArrayList<>();
-
-            for (Class<?> param : method.getParameterTypes()) {  params.add(getComponentByType(param));  }
-
             try {
-                objectOfMethod = method.invoke(appConfig, params.stream().toArray(Object[]::new));
+                objectOfMethod = method.invoke(appConfig, createArrayOfConponent(method).toArray(Object[]::new));
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
+                throw new ReflectionsException(String.format("Can't create object of methos %s", method));
             }
-
             appComponentsByName.put(method.getName(), objectOfMethod);
-                appComponents.add(objectOfMethod);
-
+            appComponents.add(objectOfMethod);
         }
     }
 
@@ -64,18 +59,24 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         }
     }
 
-    private AppConfig createAppConfig(Class<?> configClass){
+    private AppConfig createAppConfig(Class<?> configClass) {
         try {
             Constructor<?> constructor = configClass.getConstructor();
             return (AppConfig) constructor.newInstance();
         } catch (InstantiationException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
-            throw new ReflectionsException(String.format("Given class is not create %s", configClass.getName()));
+            throw new ReflectionsException(String.format("Can't create constructor for class %s", configClass.getName()));
         }
     }
 
-    private Object getComponentByType(Class<?> component){
+    private Object getComponentByType(Class<?> component) {
         return appComponents.stream().filter(x -> component.isAssignableFrom(x.getClass())).findFirst().orElseThrow();
+    }
+
+    private ArrayList<?> createArrayOfConponent(Method method) {
+        var params = new ArrayList<>();
+        Arrays.stream(method.getParameterTypes()).allMatch(x->params.add(getComponentByType(x)));
+        return params;
     }
 
     @Override
