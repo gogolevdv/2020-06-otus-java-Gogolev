@@ -43,7 +43,7 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         for (Method method : methods) {
 
             try {
-                objectOfMethod = method.invoke(appConfig, createArrayOfConponent(method).toArray(Object[]::new));
+                objectOfMethod = method.invoke(appConfig, createListOfComponent(method).toArray(Object[]::new));
             } catch (IllegalAccessException | InvocationTargetException e) {
                 e.printStackTrace();
                 throw new ReflectionsException(String.format("Can't create object of methos %s", method));
@@ -69,18 +69,26 @@ public class AppComponentsContainerImpl implements AppComponentsContainer {
         }
     }
 
-    private Object getComponentByType(Class<?> component) {
-        return appComponents.stream().filter(x -> component.isAssignableFrom(x.getClass())).findFirst().orElseThrow();
+    private Object getComponentByType(Class<?> component) throws Exception {
+            return appComponents.stream().filter(x -> component.isAssignableFrom(x.getClass())).findFirst().orElseThrow(()->new Exception("Component not found - "+ component));
     }
 
-    private ArrayList<?> createArrayOfConponent(Method method) {
+    private List<?> createListOfComponent(Method method) {
         var params = new ArrayList<>();
-        Arrays.stream(method.getParameterTypes()).allMatch(x -> params.add(getComponentByType(x)));
+            Arrays.stream(method.getParameterTypes()).allMatch(x -> {
+                try {
+                    return params.add(getComponentByType(x));
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return false;
+            });
         return params;
     }
 
+
     @Override
-    public <C> C getAppComponent(Class<C> componentClass) {
+    public <C> C getAppComponent(Class<C> componentClass) throws Exception {
 
         return (C) getComponentByType(componentClass);
     }
