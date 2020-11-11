@@ -27,27 +27,22 @@ public class DbServiceUserImpl implements DBServiceUser {
 
         User user_1 = new User(0, "Вася_1", 35, "user1", "user1");
         User user_2 = new User(0, "Вася_2", 36, "user2", "user2");
+
         AddressDataSet addr_u_1 = user_1.getAddress();
-        AddressDataSet addr_u_2 = user_2.getAddress();
-        Set<PhoneDataSet> setPhote_u_1 = user_1.getPhone();
-        PhoneDataSet ph_u_1 = new PhoneDataSet();
-        PhoneDataSet ph2_u_1 = new PhoneDataSet();
-        setPhote_u_1.add(ph_u_1);
-        setPhote_u_1.add(ph2_u_1);
-        ph_u_1.setNumber("123234123542345");
-        ph2_u_1.setNumber("098765");
-        ph_u_1.setUser(user_1);
         addr_u_1.setStreet("qwe");
+
+        AddressDataSet addr_u_2 = user_2.getAddress();
         addr_u_2.setStreet("4567");
 
-        user_1.setAddress(addr_u_1);
-        user_1.setPhone(setPhote_u_1);
+        Set<PhoneDataSet> setPhote_u_1 = user_1.getPhone();
+        PhoneDataSet ph_u_1 = new PhoneDataSet();
+        setPhote_u_1.add(ph_u_1);
+        ph_u_1.setNumber("123234123542345");
+        ph_u_1.setUser(user_1);
 
-        user_2.setAddress(addr_u_2);
 
         saveUser(user_1);
         saveUser(user_2);
-
     }
 
     @Override

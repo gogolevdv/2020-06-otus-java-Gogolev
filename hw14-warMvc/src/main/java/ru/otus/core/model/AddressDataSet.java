@@ -15,7 +15,6 @@ public class AddressDataSet {
     private String street;
 
     @OneToOne(mappedBy = "address",cascade = CascadeType.ALL)
-    @JoinColumn (name="user_id")
     private User user;
 
     public User getUser() {

@@ -61,11 +61,6 @@ public class WebConfig implements WebMvcConfigurer {
         return viewResolver;
     }
 
-//    @Override
-//    public void addViewControllers(ViewControllerRegistry registry) {
-//        registry.addViewController("/").setViewName("users");
-//    }
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("/WEB-INF/static/");

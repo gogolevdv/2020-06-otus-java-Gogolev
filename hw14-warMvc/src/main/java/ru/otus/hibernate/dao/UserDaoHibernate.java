@@ -72,7 +72,6 @@ public class UserDaoHibernate implements UserDao {
     @Override
     public List<User> getAllUsers() {
         DatabaseSessionHibernate currentSession = sessionManager.getCurrentSession();
-//        var countOfUsers = currentSession.getHibernateSession().createQuery("select count(*) from User ").getSingleResult();
 
         List<User> listOfUsers = new ArrayList<>();
         var listOfId = currentSession.getHibernateSession().createQuery("select id FROM User").list();
@@ -80,8 +79,6 @@ public class UserDaoHibernate implements UserDao {
             listOfUsers.add(currentSession.getHibernateSession().find(User.class, id));
         }
         return listOfUsers;
-//        var query = currentSession.getHibernateSession().createQuery("FROM User").list();
-//        return query;
     }
 
     @Override

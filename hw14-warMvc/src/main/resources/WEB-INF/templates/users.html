@@ -33,16 +33,8 @@
             width: 250px;
         }
 
-        .controls-container {
-            margin-bottom: 5px;
-        }
-
-        .single-button-container {
-            margin-left: 158px;
-        }
 
         h3 {
-            background: url("../static/listmark.png") no-repeat;
             padding: 2px;
             padding-left: 30px;
         }
@@ -50,7 +42,6 @@
 
     <style th:inline="text">
         h3 {
-            background: url([[@{/static/listmark.png}]]) no-repeat;
             padding: 2px;
             padding-left: 30px;
         }
@@ -71,8 +62,6 @@
         <th>Возраст</th>
         <th>Улица</th>
         <th>Телефон</th>
-<!--        <th>Логин</th>-->
-<!--        <th>Пароль</th>-->
         <th></th>
     </tr>
     </thead>
@@ -81,10 +70,8 @@
         <td th:text="${user.id}">1</td>
         <td th:text="${user.name}">Вася_1</td>
         <td th:text="${user.age}">35</td>
-        <td th:text="${user.address}">qwerty</td>
+        <td th:text="${user.address.street}">qwerty</td>
         <td th:text="${user.phone}">qwerty</td>
-<!--        <td th:text="${user.login}">user_1</td>-->
-<!--        <td th:text="${user.password}">user_1</td>-->
     </tr>
     </tbody>
 </table>

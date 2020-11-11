@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.view.RedirectView;
 import ru.otus.core.model.AddressDataSet;
+import ru.otus.core.model.PhoneDataSet;
 import ru.otus.core.model.User;
 import ru.otus.core.service.DBServiceUser;
 import ru.otus.core.service.DbServiceUserImpl;
@@ -17,6 +18,7 @@ import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Controller
@@ -46,41 +48,38 @@ public class UserController {
     @GetMapping("/user/create")
     public String userCreateView(Model model) {
         User user = new User();
-        UserViewModel newUser = new UserViewModel(new User());
-        newUser.setAddress("qwasd");
+        AddressDataSet ads = user.getAddress();
 
-        model.addAttribute("user", newUser);
+        model.addAttribute("user", user);
+        model.addAttribute("address", ads);
         return "userCreate.html";
     }
 
     @PostMapping("/user/save")
-    public RedirectView userSave(@ModelAttribute User user) {
+    public RedirectView userSave(@ModelAttribute User user, @ModelAttribute AddressDataSet ads) {
+        user.setAddress(ads);
         usersService.saveUser(user);
         return new RedirectView("/user/list", true);
     }
 
-
 }
 
-
 class UserViewModel {
-    User user;
     long id;
     String name;
     int age;
     String login = "";
     String password = "";
-    String address = "";
+    AddressDataSet address;
     String phone = "";
 
     public UserViewModel(User user) {
-        this.user = user;
         id = user.getId();
         name = user.getName();
         login = user.getLogin();
         password = user.getPassword();
         age = user.getAge();
-        address = user.getAddress().getStreet();
+        address = user.getAddress();
         user.getPhone().stream().findFirst().ifPresent(phoneDataSet -> phone = phoneDataSet.getNumber());
     }
 
@@ -104,14 +103,8 @@ class UserViewModel {
         return password;
     }
 
-    public String getAddress() {
+    public AddressDataSet getAddress() {
         return address;
-    }
-
-    public void setAddress(String street) {
-
-       user.getAddress().setStreet(street);
-
     }
 
     public String getPhone() {
