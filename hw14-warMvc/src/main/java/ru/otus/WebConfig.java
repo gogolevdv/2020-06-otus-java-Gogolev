@@ -21,7 +21,6 @@ import ru.otus.flyway.MigrationsExecutor;
 import ru.otus.flyway.MigrationsExecutorFlyway;
 import ru.otus.hibernate.HibernateUtils;
 
-@PropertySource("classpath:application.properties")
 @Configuration
 @ComponentScan("ru.otus")
 @EnableWebMvc
