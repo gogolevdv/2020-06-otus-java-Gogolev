@@ -52,23 +52,9 @@ public class RunCount {
 
                 } else {
                     System.out.println(" " + count.getI() + "   ");
-                    if (count.getDir().equals(Direction.UP)) {
-                        if (count.getI() == 10) {
-                            count.setDir(Direction.DOWN);
-                            count.setI(9);
-                        } else {
-                            count.Inc_I();
-                        }
-                    } else {
-                        if (count.getDir().equals(Direction.DOWN)) {
-                            if (count.getI() == 1) {
-                                count.setDir(Direction.UP);
-                                count.setI(2);
-                            } else {
-                                count.Dec_i();
-                            }
-                        }
-                    }
+
+                    count.changeCount();
+
                     sleepAndNotify(name);
                 }
 

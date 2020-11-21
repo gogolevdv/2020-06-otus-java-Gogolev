@@ -13,6 +13,27 @@ public class Count {
         this.i = i;
     }
 
+    public void changeCount(){
+        if (this.getDir().equals(Direction.UP)) {
+            if (this.getI() == 10) {
+                this.setDir(Direction.DOWN);
+                this.setI(9);
+            } else {
+                this.Inc_I();
+            }
+        } else {
+            if (this.getDir().equals(Direction.DOWN)) {
+                if (this.getI() == 1) {
+                    this.setDir(Direction.UP);
+                    this.setI(2);
+                } else {
+                    this.Dec_i();
+                }
+            }
+        }
+
+    }
+    
     public void Inc_I(){
         i++;
     }
