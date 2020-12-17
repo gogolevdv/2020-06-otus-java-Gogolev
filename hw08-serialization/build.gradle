@@ -3,24 +3,11 @@ plugins {
 }
 
 
-
-repositories {
-    jcenter()
-    maven {
-        url "https://maven.springframework.org/release"
-    }
-    maven {
-        url "https://maven.restlet.com"
-    }
-}
-
-
-
 group 'ru.otus'
 version '0.1'
 
-sourceCompatibility = JavaVersion.VERSION_14
-targetCompatibility = JavaVersion.VERSION_14
+sourceCompatibility = JavaVersion.VERSION_15
+targetCompatibility = JavaVersion.VERSION_15
 
 dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
