@@ -12,7 +12,6 @@ public interface Versions {
     String lombok = "1.18.12";
     String gson = "2.8.6";
 
-
     String mongodb = "4.1.0";
     String mongodbReactive = "4.1.0";
     String cassandra = "4.9.0";
@@ -22,4 +21,10 @@ public interface Versions {
     String jetty = "9.4.31.v20200723";
     String freemarker = "2.3.30";
     String reflections = "0.9.12";
+
+    String sockjs = "1.1.2";
+    String stomp = "2.3.3-1";
+    String bootstrap = "4.4.1-1";
+    String netty = "4.1.53.Final";
+
 }

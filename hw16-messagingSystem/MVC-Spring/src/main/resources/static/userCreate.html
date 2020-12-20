@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org">-->
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Create user</title>
+    <style type="text/css">
+        body {
+            padding: 50px;
+        }
+
+        label {
+            display: inline-block;
+            width: 100px;
+        }
+
+        input:read-only {
+            background: lightgray;
+        }
+
+        .row {
+            margin-top: 10px;
+        }
+    </style>
+    <link href="/webjars/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/webjars/jquery/jquery.min.js"></script>
+    <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+    <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+    <script type="text/javascript" src="app.js"></script>
+
+</head>
+<body onload="connect();">
+
+<div class="table-responsive-sm">
+    <form id="userForm" onsubmit="return false;">
+        <div>
+            <label class="control-label">Id</label>
+            <input id="userId" class="form-control" type="number" readonly style="width: 10%"/>
+        </div>
+        <div>
+            <label>Имя</label>
+            <input id="name" class="form-control" type="text" style="width: 30%"/>
+        </div>
+        <div>
+            <label>Возраст</label>
+            <input id="age" class="form-control" type="number" style="width: 30%"/>
+        </div>
+        <div>
+            <label>Логин</label>
+            <input id="login" class="form-control" type="text" style="width: 30%"/>
+        </div>
+        <div>
+            <label>Пароль</label>
+            <input id="password" class="form-control" type="text" style="width: 30%"/>
+        </div>
+        <div class="mt-sm-1">
+            <button class="btn btn-primary m-t-1" type="button" id="back" value="cancel" onclick="toIndex()">Назад
+            </button>
+            <button class="btn btn-primary m-t-1" type="button" id="reset" value="reset" onclick="resetForm()">
+                Очистить
+            </button>
+            <button class="btn btn-primary m-t-1" type="button" id="save" value="submit">Сохранить</button>
+        </div>
+    </form>
+</div>
+</body>
+</html>

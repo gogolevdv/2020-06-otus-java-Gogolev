@@ -1,0 +1,33 @@
+﻿<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.w3.org/1999/xhtml" content="text/html;">
+<head>
+    <title>Index</title>
+    <script>
+        const toUserList = () => {
+            window.location.replace("users.html");
+        }
+        const toUserCreate = () => {
+            window.location.replace("userCreate.html");
+        }
+        const toOneUser = () => {
+            window.location.replace("oneUser.html");
+        }
+    </script>
+
+
+</head>
+<body>
+<div class="top">
+    <h3>Добро пожаловать на стартовую страницу примера</h3>
+    <button id="users" class="btn btn-default" type="button" onclick="toUserList()">Перейти на страницу информации о
+        пользователях
+    </button>
+    <button id="userCreate" class="btn btn-default" type="button" onclick="toUserCreate()">Перейти на страницу
+        добавления пользователя
+    </button>
+    <button id="oneUser" class="btn btn-default" type="button" onclick="toOneUser()">Перейти на страницу выбора
+        пользователя
+    </button>
+</div>
+
+</body>
+</html>
