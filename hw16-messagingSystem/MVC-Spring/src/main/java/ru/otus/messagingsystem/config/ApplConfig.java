@@ -1,10 +1,11 @@
-package ru.otus.messagingsystem;
+package ru.otus.messagingsystem.config;
 
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import org.hibernate.SessionFactory;
 import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilderCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
@@ -34,10 +35,14 @@ public class ApplConfig implements WebSocketMessageBrokerConfigurer {
         registry.addEndpoint("/gs-guide-websocket").withSockJS();
     }
 
+
+    @Bean(initMethod = "init")
+        public InitMigration InitBean(){return new InitMigration();}
+
+
     @Bean
+    @DependsOn({"InitBean"})
     public SessionFactory sessionFactory() {
-        MigrationsExecutor migrationsExecutor = new MigrationsExecutorFlyway(HIBERNATE_CFG_FILE);
-        migrationsExecutor.executeMigrations();
 
         return HibernateUtils.buildSessionFactory(HIBERNATE_CFG_FILE, User.class);
     }

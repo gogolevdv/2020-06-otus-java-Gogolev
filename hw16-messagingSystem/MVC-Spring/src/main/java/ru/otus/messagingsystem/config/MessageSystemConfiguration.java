@@ -1,4 +1,4 @@
-package ru.otus.messagingsystem;
+package ru.otus.messagingsystem.config;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +15,7 @@ import ru.otus.messagesystem.client.CallbackRegistryImpl;
 import ru.otus.messagesystem.client.MsClient;
 import ru.otus.messagesystem.client.MsClientImpl;
 import ru.otus.messagesystem.message.MessageType;
+import ru.otus.messagingsystem.core.service.DBServiceUser;
 import ru.otus.messagingsystem.core.service.DbServiceUserImpl;
 import ru.otus.messagingsystem.core.service.handlers.GetAllUsersRequestHandler;
 import ru.otus.messagingsystem.core.service.handlers.GetUserDataRequestHandler;
@@ -37,6 +38,10 @@ public class MessageSystemConfiguration {
     }
 
     @Bean
+    public void dispose() {
+    }
+
+    @Bean
     public CallbackRegistry getCallBackRegistry() {
         return new CallbackRegistryImpl();
     }
@@ -45,7 +50,7 @@ public class MessageSystemConfiguration {
     public MsClient getDatabaseMsClient(
             MessageSystem messageSystem,
             CallbackRegistry callbackRegistry,
-            @Autowired DbServiceUserImpl dbServiceUser
+            @Autowired DBServiceUser dbServiceUser
     ) {
         logger.info("databaseMsClient run, dnSeviceUser:{}", dbServiceUser);
         HandlersStore requestHandlerDatabaseStore = new HandlersStoreImpl();
