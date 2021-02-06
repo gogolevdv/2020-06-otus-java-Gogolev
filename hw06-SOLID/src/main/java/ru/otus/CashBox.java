@@ -1,26 +1,24 @@
 package ru.otus;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class CashBox {
 
     private final int MIN_CASH_SLOT = 0;
     private final int MAX_CASH_SLOT = 500;
 
-    private final Map withdrawalArray = new HashMap<BankNotes, Integer>();
-    private final Map cashSlot = new HashMap<BankNotes, Integer>();
+    private final Map<BankNotes, Integer> cashSlot;
+//    private final HashMap<BankNotes, Integer> withdrawalArray = new HashMap<>();
 
-    CashBox() {
-        cashSlot.put(BankNotes.FiveThousand, 0);
-        cashSlot.put(BankNotes.TwoThousand, 0);
-        cashSlot.put(BankNotes.OneThousand, 0);
-        cashSlot.put(BankNotes.FiveHundred, 0);
-        cashSlot.put(BankNotes.TwoHundred, 0);
-        cashSlot.put(BankNotes.OneHundred, 0);
-        cashSlot.put(BankNotes.Fifty, 0);
-        cashSlot.put(BankNotes.Ten, 0);
+
+    List<BankNotes> banknotes = Arrays.stream(BankNotes.values()).sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+
+    CashBox(Map<BankNotes, Integer> container) {
+
+        this.cashSlot = container;
+
+
     }
 
     public int getMIN_CASH_SLOT() {
@@ -47,13 +45,14 @@ public class CashBox {
 
     public void addBankNotes(BankNotes bankNotes, int count) {
 
-        cashSlot.put(bankNotes, count);
+
+        cashSlot.put(bankNotes, cashSlot.get(bankNotes) + count);
 
     }
 
     public Set<Map.Entry<BankNotes, Integer>> withdrawal(int amount) {
 
-        withdrawalArray.clear();
+        final HashMap<BankNotes, Integer> withdrawalArray = new HashMap<>();
 
         while (amount >= BankNotes.Ten.getValue()) {
             amount = getSlot(BankNotes.FiveThousand, amount);
@@ -73,11 +72,8 @@ public class CashBox {
     // Выдача определенной банкноты
     private int getSlot(BankNotes bankNotes, int amount) {
 
-        int count = 0;
-
-        while (0 < amount && amount >= bankNotes.getValue() && (Integer) cashSlot.get(bankNotes) > 0) {
-            cashSlot.put(bankNotes, (Integer) cashSlot.get(bankNotes) - 1);
-            withdrawalArray.put(bankNotes, count += 1);
+        while (0 < amount && amount >= bankNotes.getValue() && cashSlot.get(bankNotes) > 0) {
+            cashSlot.put(bankNotes, cashSlot.get(bankNotes) - 1);
             amount -= bankNotes.getValue();
         }
         return amount;

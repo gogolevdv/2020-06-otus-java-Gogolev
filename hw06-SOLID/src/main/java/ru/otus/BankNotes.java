@@ -11,7 +11,7 @@ public enum BankNotes {
     OneHundred(100),
     Fifty(50);
 
-    private int value;
+    private final int value;
 
     BankNotes(int value) {
         this.value = value;

@@ -1,17 +1,31 @@
 package ru.otus;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static ru.otus.BankNotes.*;
 
 public class ATM {
 
-    private final CashBox myCashBox = new CashBox();
+    private final CashBox myCashBox;
     private final Screen myATMScreen = new Screen();
     private final KeyBoard myKeyBoard = new KeyBoard();
+    List<BankNotes> banknotes = Arrays.stream(values()).sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 
+    public ATM(){
+
+        Map<BankNotes, Integer> cashSlot = new HashMap<>();
+
+        for (BankNotes bankNotes : banknotes) {
+
+            cashSlot.put(bankNotes, 0);
+
+        }
+
+        myCashBox = new CashBox(cashSlot);
+
+    }
 
     public void initATM() throws IOException, InterruptedException {
         myATMScreen.showMessage("ATM initialization.....");
@@ -39,23 +53,22 @@ public class ATM {
             command = myKeyBoard.getDataFromKeyboard();
 
             switch (command) {
-
-                case "1":
+                case "1" -> {
                     myATMScreen.showMessage("Нажата 1");
                     refillMenu();
-                    break;
-                case "2":
+                }
+                case "2" -> {
                     myATMScreen.showMessage("Нажата 2");
                     withdrawalMenu();
-                    break;
-                case "3":
+                }
+                case "3" -> {
                     myATMScreen.showMessage("Нажата 3");
                     withdrawalAll();
-                    break;
-                case "4":
-                    myATMScreen.showMessage("Нажата 3");
+                }
+                case "4" -> {
+                    myATMScreen.showMessage("Нажата 4");
                     viewCashSlots();
-                    break;
+                }
             }
         } while (!command.equals("exit"));
 
@@ -76,8 +89,8 @@ public class ATM {
 
                 parBankNotes = myKeyBoard.getDataFromKeyboard();
 
-                for (BankNotes qq : BankNotes.values()) {
-                    gettrue = gettrue | parBankNotes.equals(String.valueOf(qq.getValue()));
+                for (BankNotes bankNotes : values()) {
+                    gettrue = gettrue | parBankNotes.equals(String.valueOf(bankNotes.getValue()));
                 }
 
             } while (!gettrue && !parBankNotes.equals("exit"));
@@ -99,7 +112,7 @@ public class ATM {
                 myATMScreen.showMessage("Номинал купюры: " + parBankNotes + "; Количество купюр: " + countBankNotes);
 
                 if (!countBankNotes.equals("exit"))
-                    addMoneyToCashSlot(Arrays.stream(BankNotes.values()).findFirst().get().getBankNote(Integer.parseInt(parBankNotes)), Integer.parseInt(countBankNotes));
+                    addMoneyToCashSlot(Arrays.stream(values()).findFirst().get().getBankNote(Integer.parseInt(parBankNotes)), Integer.parseInt(countBankNotes));
 
             }
         } while (!parBankNotes.equals("exit") && !countBankNotes.equals("exit"));
