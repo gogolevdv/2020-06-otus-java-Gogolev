@@ -1,0 +1,52 @@
+plugins {
+    id 'java'
+    id "com.google.protobuf" version "0.8.12"
+}
+
+group 'ru.otus'
+version '0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'io.grpc', name: 'grpc-netty', version: '1.31.1'
+    compile group: 'io.grpc', name: 'grpc-protobuf', version: '1.31.1'
+    compile group: 'io.grpc', name: 'grpc-stub', version: '1.31.1'
+    compile group: 'org.slf4j', name: 'slf4j-log4j12', version: '1.7.30'
+    compileOnly "org.apache.tomcat:annotations-api:6.0.53"
+}
+
+def filesBaseDir = "${project.projectDir}/src/"
+def protoSrcDir = "${project.projectDir}/src/main/proto"
+def grpcSrcDir = "${project.projectDir}/src/main/grpc"
+
+sourceSets {
+    main {
+        proto {
+            srcDir protoSrcDir
+        }
+        java {
+            srcDir grpcSrcDir
+        }
+    }
+}
+
+protobuf {
+    protoc {
+        artifact = 'com.google.protobuf:protoc:3.12.1'
+    }
+
+    plugins {
+        grpc {
+            artifact = 'io.grpc:protoc-gen-grpc-java:1.31.1'
+
+        }
+    }
+
+    generatedFilesBaseDir = filesBaseDir
+    generateProtoTasks {
+        ofSourceSet('main')*.plugins { grpc {} }
+    }
+}
